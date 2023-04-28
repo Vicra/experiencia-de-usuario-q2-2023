@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
+import Slider from "./components/Slider";
 
 import NavigationBar from "./pages/NavigationBar/NavigationBar";
 
@@ -7,6 +8,7 @@ const Home = () => {
   return (
     <>
       <h1>Home</h1>
+      <Slider />
     </>
   );
 };
@@ -15,6 +17,7 @@ const About = () => {
   return (
     <>
       <h1>About</h1>
+      {/* <Slider /> */}
     </>
   );
 };
