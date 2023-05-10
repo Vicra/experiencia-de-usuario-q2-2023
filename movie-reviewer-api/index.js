@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
+const cardService = require("./services/card.service");
+
 const { isEmail, isPassword } = require("./utils/validator");
 app.use(bodyParser.json());
 
@@ -30,6 +32,40 @@ app.post("/login/", function (req, res) {
   res.send({
     success: true,
   });
+});
+
+app.get("/cards", async (req, res) => {
+  console.log("query", req.query);
+  try {
+    const cards = await cardService.getCards();
+    res.send(cards);
+  }
+  catch (e) {
+    console.log(e);
+  }
+});
+
+// ?listId=1
+app.post("/cards", async (req, res) => {
+  // const card = req.body;
+  // card.name   
+
+  // destructuracion de objeto
+  const { name, description } = req.body;
+
+  try {
+    if (typeof name == "string" &&
+      typeof description == "string") {
+      throw "Server error";
+      const [cardId] = await cardService.createCard(req.body);
+      res.send({ cardId });
+    }
+  }
+  catch (e) {
+    res.status(500).send({
+      error: e.toString()
+    });
+  }
 });
 
 app.listen(3000);
