@@ -1,8 +1,11 @@
 const HTTPCodes = require("../utils/HTTPCodes");
+const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
 
 const { isEmail, isPassword } = require("../utils/validator");
+const { registerUser, getCredentials } = require("../services/user.service");
 
-function register(req, res) {
+async function register(req, res) {
   const { email, password } = req.body;
   const errorMessages = [];
   if (!isEmail(email)) {
@@ -16,14 +19,33 @@ function register(req, res) {
   if (errorMessages.length) {
     res.status(HTTPCodes.BAD_REQUEST).send({ error: errorMessages });
   } else {
-    
+    const salt = crypto.randomBytes(128).toString("base64");
+    const encryptedPassword = crypto
+      .pbkdf2Sync(password, salt, 30000, 64, "sha256")
+      .toString("base64");
+
+    // req.body
+    /*
+    {
+      email: ""
+      password: ""
+    }
+    */
+    const [newUserId] = await registerUser({
+      ...req.body,
+      encryptedPassword,
+      // salt: salt,
+      salt,
+    });
+
     res.send({
       success: true,
+      newUserId,
     });
   }
 }
 
-function login(req, res) {
+async function login(req, res) {
   const { email, password } = req.body;
   // 0. TODO: middleware
 
@@ -40,9 +62,23 @@ function login(req, res) {
   if (errorMessages.length) {
     res.status(HTTPCodes.BAD_REQUEST).send({ error: errorMessages });
   } else {
-    res.send({
-      success: true,
-    });
+    const [credentials] = await getCredentials(email);
+
+    const encryptedPassword = crypto
+      .pbkdf2Sync(password, credentials.salt, 30000, 64, "sha256")
+      .toString("base64");
+
+    if (encryptedPassword == credentials.password) {
+      // generate
+      jwt.sign({ email });
+      res.send({
+        success: true,
+      });
+    } else {
+      res.status(HTTPCodes.UNAUTHORIZED).send({
+        message: "Contrasena incorrecta",
+      });
+    }
   }
 
   // 2. TODO: ejecucion del procedimiento
