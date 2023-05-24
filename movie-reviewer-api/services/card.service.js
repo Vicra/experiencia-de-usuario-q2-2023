@@ -1,11 +1,11 @@
 const knex = require("knex")({
   client: "mysql",
   connection: {
-    host: process.env.HOST,
+    host: "127.0.0.1",
     port: 3306,
-    user: "test",
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
+    user: "victor",
+    password: "test",
+    database: "trellodb",
   },
 });
 
