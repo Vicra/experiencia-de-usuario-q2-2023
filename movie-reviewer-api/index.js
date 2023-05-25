@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+require('dotenv').config();
 
 const cardRouter = require("./routes/card.routes");
 const userRouter = require("./routes/user.routes");

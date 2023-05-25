@@ -6,41 +6,48 @@ const { isEmail, isPassword } = require("../utils/validator");
 const { registerUser, getCredentials } = require("../services/user.service");
 
 async function register(req, res) {
-  const { email, password } = req.body;
-  const errorMessages = [];
-  if (!isEmail(email)) {
-    errorMessages.push("Email is not valid");
-  }
-
-  if (!isPassword(password)) {
-    errorMessages.push("Password is not valid");
-  }
-
-  if (errorMessages.length) {
-    res.status(HTTPCodes.BAD_REQUEST).send({ error: errorMessages });
-  } else {
-    const salt = crypto.randomBytes(128).toString("base64");
-    const encryptedPassword = crypto
-      .pbkdf2Sync(password, salt, 30000, 64, "sha256")
-      .toString("base64");
-
-    // req.body
-    /*
-    {
-      email: ""
-      password: ""
+  try {
+    const { email, password } = req.body;
+    const errorMessages = [];
+    if (!isEmail(email)) {
+      errorMessages.push("Email is not valid");
     }
-    */
-    const [newUserId] = await registerUser({
-      ...req.body,
-      encryptedPassword,
-      // salt: salt,
-      salt,
-    });
 
-    res.send({
-      success: true,
-      newUserId,
+    if (!isPassword(password)) {
+      errorMessages.push("Password is not valid");
+    }
+
+    if (errorMessages.length) {
+      res.status(HTTPCodes.BAD_REQUEST).send({ error: errorMessages });
+    } else {
+      const salt = crypto.randomBytes(128).toString("base64");
+      const encryptedPassword = crypto
+        .pbkdf2Sync(password, salt, 30000, 64, "sha256")
+        .toString("base64");
+
+      // req.body
+      /*
+      {
+        email: ""
+        password: ""
+      }
+      */
+      const [newUserId] = await registerUser({
+        ...req.body,
+        encryptedPassword,
+        // salt: salt,
+        salt,
+      });
+
+      res.send({
+        success: true,
+        newUserId,
+      });
+    }
+  } catch (e) {
+    res.status(HTTPCodes.INTERNAL_SERVER_ERROR).send({
+      message: "Internal server error",
+      detail: e.toString(),
     });
   }
 }
@@ -70,6 +77,7 @@ async function login(req, res) {
         .pbkdf2Sync(password, credentials.salt, 30000, 64, "sha256")
         .toString("base64");
 
+      console.log('process.env.TOKEN_KEY', process.env.TOKEN_KEY);
       if (encryptedPassword == credentials.password) {
         // generate
         const accessToken = jwt.sign({ email }, process.env.TOKEN_KEY || "AS4D5FF6G78NHCV7X6X5C", {

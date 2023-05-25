@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "ec1d79b1-7b95-4bf7-ae62-348120ee1d88",
+		"name": "movie reviewer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "364894"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"victor.ramirez@unitec.edu\",\r\n    \"password\": \"Masisa123!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all cards",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY3Rvci5yYW1pcmV6QHVuaXRlYy5lZHUiLCJpYXQiOjE2ODQ5NzA0MzQsImV4cCI6MTY4NTA1NjgzNH0.rxlHVv6WNiO7Sd6WxadTtFeMo1EG-hzIcPpBaOa_vwg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/cards/all",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"cards",
+						"all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
