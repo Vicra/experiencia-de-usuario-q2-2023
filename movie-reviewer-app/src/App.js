@@ -3,6 +3,7 @@ import "./App.css";
 import Slider from "./components/Slider";
 
 import NavigationBar from "./pages/NavigationBar/NavigationBar";
+import Login from "./components/Login";
 
 const Home = () => {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/about" component={About} />
+          <Route path="/login" component={Login} />
           <Route path="/contact" component={Contact} />
         </Switch>
       </Router>
