@@ -3,13 +3,17 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 require('dotenv').config();
+const cors = require('cors');
 
 const cardRouter = require("./routes/card.routes");
 const userRouter = require("./routes/user.routes");
 
 // utils
+app.use(cors());
+
 
 app.use("/cards", cardRouter);
 app.use("/user", userRouter);
+
 
 app.listen(3000);
