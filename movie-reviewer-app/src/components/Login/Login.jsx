@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 
 import { useState } from "react";
+import services from "../../utils/services";
 
 import validator from "../../utils/validator";
 
@@ -44,6 +45,10 @@ function Login() {
         ...errors,
         password: "Password is invalid",
       });
+    }
+
+    if (!errors.email && !errors.password) {
+      services.postLogin(form.email, form.password);
     }
     // else {
     //   // no hay errores
