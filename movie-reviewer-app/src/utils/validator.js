@@ -11,4 +11,8 @@ function isPassword(str) {
   return re.test(str);
 }
 
-// export default { isEmail, isPassword };
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  isEmail,
+  isPassword
+};
