@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import Slider from "./components/Slider";
 
@@ -6,9 +11,13 @@ import NavigationBar from "./pages/NavigationBar/NavigationBar";
 import Login from "./components/Login";
 
 const Home = () => {
+  const search = useLocation().search;
+  const searchParams = new URLSearchParams(search);
+
   return (
     <>
       <h1>Home</h1>
+      <p>Welcome {searchParams.get("name")}!!!</p>
       <Slider />
     </>
   );

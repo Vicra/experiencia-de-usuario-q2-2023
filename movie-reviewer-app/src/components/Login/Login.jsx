@@ -2,17 +2,20 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 
+import { useHistory } from "react-router-dom";
 import { useState } from "react";
-import services from "../../utils/services";
 
+import services from "../../utils/services";
 import validator from "../../utils/validator";
 
 function Login() {
+  const history = useHistory();
   // { email, password }
 
   const [errors, setErrors] = useState({
     email: "",
     password: "",
+    general: "",
   });
 
   /*
@@ -27,7 +30,7 @@ function Login() {
     password: "",
   });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     // validar los inputs
@@ -48,7 +51,36 @@ function Login() {
     }
 
     if (!errors.email && !errors.password) {
-      services.postLogin(form.email, form.password);
+      const response = await services.postLogin(form.email, form.password);
+
+      // there is an error
+      if (response.message) {
+        // limpiar el formulario (password)
+        setForm({
+          ...form,
+          password: "",
+        });
+
+        // quitar invalids de inputs, y configurar un error de backend
+        setErrors({
+          email: "",
+          password: "",
+          general: response.message.join(". "),
+        });
+      } else {
+        // guardar el token en localStorage
+        localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("refreshToken", response.refreshToken);
+
+        // redirect al home screen
+        history.push(`/?name=${response.name}`);
+        // "?name" + variable
+      }
+      // on success
+      // accessToken, refreshToken
+
+      // on fail
+      // message
     }
     // else {
     //   // no hay errores
@@ -95,11 +127,25 @@ function Login() {
               }}
               isInvalid={!!errors.password}
             />
+            <Form.Text
+              style={{
+                color: "red",
+              }}
+            >
+              {errors.password}
+            </Form.Text>
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </Form>
+        <Form.Text
+          style={{
+            color: "red",
+          }}
+        >
+          {errors.general}
+        </Form.Text>
       </Container>
     </>
   );

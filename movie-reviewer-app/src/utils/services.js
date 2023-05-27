@@ -1,22 +1,23 @@
 import axios from "axios";
 
-function postLogin(email, password) {
+async function postLogin(email, password) {
   const options = {
-    method: 'POST',
-    url: 'http://localhost:3000/user/login',
-    data: { email: email, password: password }
+    method: "POST",
+    url: "http://localhost:3000/user/login",
+    data: { email: email, password: password },
   };
 
-  axios.request(options).then(function (response) {
-    console.log(response.data);
-    const { accessToken, refreshToken } = response.data;
-    console.log(accessToken, refreshToken);
-  }).catch(function (error) {
-    console.error(error);
-  });
+  try {
+    const response = await axios.request(options);
+    return response.data;
+  } catch (e) {
+    return {
+      message: e.response.data.error,
+    };
+  }
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
-  postLogin
+  postLogin,
 };
