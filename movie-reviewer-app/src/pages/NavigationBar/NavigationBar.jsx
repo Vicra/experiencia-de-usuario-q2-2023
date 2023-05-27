@@ -1,3 +1,4 @@
+import { useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -5,8 +6,16 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
 function NavigationBar() {
+  const history = useHistory();
   const isLoggedIn = !!localStorage.getItem("accessToken");
-  console.log(isLoggedIn);
+
+  const logout = () => {
+    // limpiar el local storage
+    localStorage.clear();
+    // redireccionar
+    history.push("/login");
+  };
+
   return (
     <Navbar bg="dark" expand="lg" variant="dark">
       <Container fluid>
@@ -22,6 +31,11 @@ function NavigationBar() {
             <Nav.Link href="/about">About</Nav.Link>
             <Nav.Link href="/contact">Contact</Nav.Link>
             {!isLoggedIn && <Nav.Link href="/login">Login</Nav.Link>}
+            {isLoggedIn && (
+              <Button variant="warning" onClick={logout}>
+                Logout
+              </Button>
+            )}
           </Nav>
           <Form className="d-flex">
             <Form.Control
