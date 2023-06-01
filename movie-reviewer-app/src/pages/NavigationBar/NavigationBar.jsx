@@ -5,14 +5,18 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setSearchInput } from "../../src/features/searchText/searchTextSlice";
+
 function NavigationBar() {
+  const searchText = useSelector((state) => state.searchText.value);
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const isLoggedIn = !!localStorage.getItem("accessToken");
 
   const logout = () => {
-    // limpiar el local storage
     localStorage.clear();
-    // redireccionar
     history.push("/login");
   };
 
@@ -43,6 +47,14 @@ function NavigationBar() {
               placeholder="Search"
               className="me-2"
               aria-label="Search"
+              value={searchText}
+              onChange={(e) => {
+                console.log(e.target.value);
+                if (e.target.value !== searchText) {
+                  dispatch(setSearchInput(e.target.value));
+                }
+                console.log(searchText);
+              }}
             />
             <Button variant="outline-success">Search</Button>
           </Form>
