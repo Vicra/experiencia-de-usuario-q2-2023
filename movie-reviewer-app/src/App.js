@@ -1,14 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 // import Slider from "./components/Slider";
 
 import NavigationBar from "./pages/NavigationBar";
 import Login from "./components/Login";
 import ListCards from "./components/ListCards";
+import Board from "./pages/Board/Board";
 
 // const Home = () => {
 //   const search = useLocation().search;
@@ -46,7 +43,7 @@ function App() {
       <NavigationBar />
       <Router>
         <Switch>
-          <Route exact path="/" component={ListCards} />
+          <Route exact path="/" component={Board} />
           <Route path="/about" component={About} />
           <Route path="/login" component={Login} />
           <Route path="/contact" component={Contact} />
