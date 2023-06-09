@@ -3,7 +3,11 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
 const { isEmail, isPassword } = require("../utils/validator");
-const { registerUser, getCredentials } = require("../services/user.service");
+const {
+  registerUser,
+  getCredentials,
+  getAllUsers,
+} = require("../services/user.service");
 
 async function register(req, res) {
   try {
@@ -125,7 +129,18 @@ async function login(req, res) {
   // 4. TODO: control de excepciones try catch
 }
 
+async function getUsers(req, res) {
+  const { limit = 10, offset = 0 } = req.query;
+  try {
+    const { users, total } = await getAllUsers(limit, offset);
+    res.send({ users, total, limit, offset });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 module.exports = {
   register,
   login,
+  getUsers,
 };

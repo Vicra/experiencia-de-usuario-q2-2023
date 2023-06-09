@@ -26,7 +26,25 @@ const getCredentials = async (email) => {
   return JSON.parse(credentials);
 };
 
+const getAllUsers = async (limit, offset) => {
+  let users = await knex
+    .select("email", "id")
+    .from("users")
+    .limit(limit)
+    .offset(offset)
+    .orderBy("id");
+  users = JSON.stringify(users);
+
+  let [total] = await knex("users").count("*");
+  total = total["count(*)"];
+  return {
+    users: JSON.parse(users),
+    total,
+  };
+};
+
 module.exports = {
   registerUser,
   getCredentials,
+  getAllUsers,
 };
