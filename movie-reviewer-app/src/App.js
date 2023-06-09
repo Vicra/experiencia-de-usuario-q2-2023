@@ -3,7 +3,8 @@ import "./App.css";
 
 import NavigationBar from "./pages/NavigationBar";
 import Login from "./components/Login";
-import Board from "./pages/Board/Board";
+// import Board from "./pages/Board/Board";
+import Users from "./components/Users";
 
 const About = () => {
   return (
@@ -27,7 +28,7 @@ function App() {
       <NavigationBar />
       <Router>
         <Switch>
-          <Route exact path="/" component={Board} />
+          <Route exact path="/" component={Users} />
           <Route path="/about" component={About} />
           <Route path="/login" component={Login} />
           <Route path="/contact" component={Contact} />
